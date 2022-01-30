@@ -13,15 +13,15 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    "vue/max-attributes-per-line": "off",
-    'max-len': 'off' // disables line length check
+    'vue/max-attributes-per-line': 'off',
+    'max-len': 'off', // disables line length check
   },
   overrides: [
     {
       files: [
         '**/__tests__/*.{j,t}s?(x)',
         '**/tests/unit/**/*.spec.{j,t}s?(x)',
-        '*.vue'
+        '*.vue',
       ],
       env: {
         mocha: true,
