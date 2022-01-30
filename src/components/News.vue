@@ -84,7 +84,7 @@
                                 <arrow-right class="white--text" />
                             </v-btn>
                         </v-app-bar>
-                        <v-card-text class="mt-12 pt-12">
+                        <v-card-text class="mt-12" style="height: 220px">
                             <div class="white--text">{{headLine.publishedAt | formatDate}}</div>
                             <p class="text-h6 white--text">
                                 {{headLine.title}}
