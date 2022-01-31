@@ -1,9 +1,22 @@
 <template>
     <!-- eslint-disable max-len -->
-    <v-container fluid>
+    <v-container>
         <v-row>
-            <v-col>
+            <v-col
+                cols="12"
+                md="2"
+            >
                 <h1 class="font-weight-light primary--text">Headlines</h1>
+            </v-col>
+            <v-col
+                cols="12"
+                md="8"
+            >
+                <v-text-field
+                    label="Type here to search news"
+                    @keyup="searchHeadline($event)"
+                    prepend-icon="mdi-text-box-search-outline"
+                ></v-text-field>
             </v-col>
             <v-col>
                 <v-dialog
@@ -25,29 +38,37 @@
                     </template>
                     <v-card>
                         <v-toolbar
-                        dark
-                        color="primary"
+                            dark
+                            color="primary"
                         >
-                        <v-toolbar-title>Please select the Source that you want to filter</v-toolbar-title>
-                        <v-spacer></v-spacer>
-                        <v-toolbar-items>
                             <v-btn
                                 text
                                 dark
-                                @click="dialog = false; headlineSwitch = []"
+                                @click="dialog = false;"
                             >
-                                Cancel
+                                <v-icon>mdi-close</v-icon>
                             </v-btn>
-                            <v-btn
-                                dark
-                                text
-                                @click="dialog = false"
+                            <v-toolbar-title>Please select the Source that you want to filter</v-toolbar-title>
+                            <v-spacer></v-spacer>
+                            <v-toolbar-items>
+                                <v-btn
+                                    v-if="headlineSwitch === undefined || headlineSwitch.length > 0"
+                                    text
+                                    dark
+                                    @click="headlineSwitch = []"
                                 >
-                                Apply
-                            </v-btn>
-                        </v-toolbar-items>
+                                    Clear
+                                </v-btn>
+                                <v-btn
+                                    dark
+                                    text
+                                    @click="filterLatestHeadlines(headlineSwitch); dialog = false"
+                                >
+                                    Apply
+                                </v-btn>
+                            </v-toolbar-items>
                         </v-toolbar>
-                        <v-container fluid>
+                        <v-container>
                             <v-row no-gutters>
                                 <v-col
                                     v-for="(headline, s) in headlinesSources.sources"
@@ -62,7 +83,7 @@
                                         v-model="headlineSwitch"
                                         color="primary"
                                         :label="headline.name"
-                                        :value="headline.id"
+                                        :value="headline.name"
                                     ></v-switch>
                                 </v-col>
                             </v-row>
@@ -72,13 +93,34 @@
             </v-col>
         </v-row>
         <v-row>
+            <v-overlay :value="isLoading">
+                <v-progress-circular
+                    indeterminate
+                    size="64"
+                ></v-progress-circular>
+            </v-overlay>
+            <v-col style="margin-top: 10%" v-if="(latestHeadlines.length === 0 || latestHeadlines === undefined) && !isLoading">
+                <v-alert
+                    border="right"
+                    colored-border
+                    type="info"
+                    elevation="2"
+                    class="text-center"
+                >
+                <h4>No record found in database.</h4>
+                    A few suggestions<br>
+                    Make sure all words are spelled correctly<br>
+                    Try different keywords<br>
+                    Try more general keywords<br>
+                </v-alert>
+            </v-col>
             <v-col
                 cols="12"
                 md="4"
                 sm="6"
                 lg="3"
                 xs="1"
-                v-for="(headLine, index) in latestHeadlines.articles"
+                v-for="(headLine, index) in latestHeadlines"
                 :key="index"
             >
                 <v-card
@@ -103,8 +145,9 @@
                             <v-btn
                                 color="white"
                                 icon
+                                @click="toDetail(headLine)"
                             >
-                                <arrow-right class="primary--text" />
+                                <v-icon>mdi-arrow-right-thin</v-icon>
                             </v-btn>
                         </v-app-bar>
 
@@ -146,8 +189,9 @@
                             <v-btn
                                 color="white"
                                 icon
+                                @click="toDetail(headLine)"
                             >
-                                <arrow-right class="white--text" />
+                                <v-icon>mdi-arrow-right-thin</v-icon>
                             </v-btn>
                         </v-app-bar>
                         <v-card-text class="mt-12" style="height: 220px">
@@ -165,50 +209,43 @@
 </template>
 
 <script>
-import ArrowRight from 'vue-material-design-icons/ArrowRight.vue';
-// import FilterMenu from 'vue-material-design-icons/FilterMenu.vue';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'News',
-  components: { ArrowRight },
   data() {
     return {
-      latestHeadlines: [],
-      headlinesSources: [],
       dialog: false,
       headlineSwitch: [],
+      historyBack: false,
     };
   },
   methods: {
-
-    // fetching headline news from backend
-    getLatestHeadlines() {
-      fetch('https://newsapi.org/v2/top-headlines?country=us&apiKey=099148be22804e849a0c6fe022b7cf5e')
-        .then((response) => response.json())
-        .then((data) => {
-          this.latestHeadlines = data;
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+    ...mapActions(['getLatestHeadlines', 'getHeadlinesSources', 'filterLatestHeadlines', 'getLoadingStatus', 'getHeadlinesAutocomplete', 'setDetailNews']),
+    // onApplyFilter() {
+    //   this.dialog = false;
+    //   this.filterLatestHeadlines(this.headlineSwitch);
+    // },
+    searchHeadline(e) {
+      if (e.target.value.length === 0) {
+        this.getLatestHeadlines();
+      } else {
+        this.getHeadlinesAutocomplete(e);
+      }
     },
-
-    // fetching headline source from backend to show in filter menu
-    getLatestHeadlinesSource() {
-      fetch('https://newsapi.org/v2/sources?apiKey=099148be22804e849a0c6fe022b7cf5e')
-        .then((response) => response.json())
-        .then((data) => {
-          this.headlinesSources = data;
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+    toDetail(headline) {
+      this.setDetailNews(headline);
+      this.$router.push('/detail');
     },
-
   },
+  computed: mapGetters(['latestHeadlines', 'headlinesSources', 'isLoading', 'headlineAutocompletes']),
   created() {
-    this.getLatestHeadlines();
-    this.getLatestHeadlinesSource();
+    if (this.latestHeadlines === undefined || this.latestHeadlines.length <= 0) {
+      this.getLatestHeadlines();
+    }
+    if (this.headlinesSources === undefined || this.headlinesSources.length <= 0) {
+      this.getHeadlinesSources();
+    }
   },
 };
 </script>

@@ -5,10 +5,12 @@
       color="primary"
       dark
     >
-      <div class="d-flex align-center">
-        <h1>News</h1>
-      </div>
-      <v-spacer></v-spacer>
+      <v-container>
+        <div class="d-flex align-center">
+          <h1 class="font-weight-medium">News</h1>
+        </div>
+        <v-spacer></v-spacer>
+      </v-container>
     </v-app-bar>
 
     <v-main>
