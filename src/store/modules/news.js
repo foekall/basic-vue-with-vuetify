@@ -11,7 +11,7 @@ const actions = {
   // fetching headline news from backend
   getLatestHeadlines({ commit }) {
     commit('setLoadingStatus', true);
-    fetch('https://newsapi.org/v2/top-headlines?country=us&apiKey=159a9223ab1447fe8342a2e8f4bf75eb')
+    fetch('https://newsapi.org/v2/top-headlines?country=us&apiKey=8994ba8af00045af9eacce5ae1fcd5f0')
       .then((response) => response.json())
       .then((data) => {
         commit('setLoadingStatus', false);
@@ -26,7 +26,7 @@ const actions = {
   // fetching headline source from backend to show in filter menu
   getHeadlinesSources({ commit }) {
     commit('setLoadingStatus', true);
-    fetch('https://newsapi.org/v2/sources?apiKey=159a9223ab1447fe8342a2e8f4bf75eb')
+    fetch('https://newsapi.org/v2/sources?apiKey=8994ba8af00045af9eacce5ae1fcd5f0')
       .then((response) => response.json())
       .then((data) => {
         commit('setLoadingStatus', false);
@@ -43,7 +43,7 @@ const actions = {
     const keywords = e.target.value;
     if (keywords.length > 2) {
       commit('setLoadingStatus', true);
-      fetch(`https://newsapi.org/v2/top-headlines?q=${keywords}&apiKey=159a9223ab1447fe8342a2e8f4bf75eb`)
+      fetch(`https://newsapi.org/v2/top-headlines?q=${keywords}&apiKey=8994ba8af00045af9eacce5ae1fcd5f0`)
         .then((response) => response.json())
         .then((data) => {
           commit('setLoadingStatus', false);
@@ -62,6 +62,10 @@ const actions = {
 
   setDetailNews({ commit }, news) {
     commit('setDetailState', news);
+  },
+
+  updateTitle({ commit }, news) {
+    commit('updateNewsTitle', news);
   },
 
 };
@@ -86,11 +90,6 @@ const mutations = {
   setHeadlinesAutocomplete(state, headlineAutocomplete) {
     state.originLatesHeadline = headlineAutocomplete;
     state.latestHeadline = headlineAutocomplete;
-    // const arrHeadline = [];
-    // headlineAutocomplete.articles.forEach((element) => {
-    //   arrHeadline.push(element.title);
-    // });
-    // state.headlineAutocomplete = arrHeadline;
   },
   setLoadingStatus(state, status) {
     state.loading = status;
@@ -102,12 +101,12 @@ const mutations = {
       state.visitedHeadline.push(news);
     }
   },
-//   updateTodo: (state, updTodo) => {
-//     const index = state.todos.findIndex(todo => todo.id === updTodo.id);
-//     if (index !== -1) {
-//       state.todos.splice(index, 1, updTodo);
-//     }
-//   }
+  updateNewsTitle: (state, news) => {
+    const index = state.originLatesHeadline.findIndex((oNew) => oNew.title === news.title);
+    if (index !== -1) {
+      state.originLatesHeadline.splice(index, 1, news);
+    }
+  },
 };
 
 const state = {

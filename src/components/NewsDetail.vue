@@ -52,7 +52,7 @@
                 color="primary"
                 text
                 :disabled="!valid"
-                @click="dialog = false"
+                @click="updateNewsTitle(objNews)"
               >
                 Update
               </v-btn>
@@ -109,19 +109,21 @@ export default {
       dialog: false,
       valid: true,
       title: '',
+      // validate the news title character limit
       titleRules: [
-        (v) => !!v || 'Title is required',
-        (v) => (v && v.length <= 100) || 'Title must be less than 100 characters',
+        (v) => !!v || 'News title is required',
+        (v) => (v && v.length <= 100) || 'News title must be less than 100 characters',
       ],
     };
   },
   methods: {
-    ...mapActions(['setDetailNews']),
+    ...mapActions(['setDetailNews', 'updateTitle']),
     toDetail(headline) {
+      // update selected headline into state to show in detail page
       this.setDetailNews(headline);
-      this.$router.push('/detail');
     },
     goBack() {
+      // go back to home page
       this.$router.push('/');
     },
     validate() {
@@ -129,6 +131,12 @@ export default {
     },
     reset() {
       this.title = this.objNews.title;
+    },
+    updateNewsTitle(news) {
+      this.dialog = false;
+      const arrNews = news;
+      arrNews.title = this.title;
+      this.updateTitle(arrNews);
     },
   },
   computed: mapGetters(['objNews', 'objVisitedHeadlines']),

@@ -222,10 +222,6 @@ export default {
   },
   methods: {
     ...mapActions(['getLatestHeadlines', 'getHeadlinesSources', 'filterLatestHeadlines', 'getLoadingStatus', 'getHeadlinesAutocomplete', 'setDetailNews']),
-    // onApplyFilter() {
-    //   this.dialog = false;
-    //   this.filterLatestHeadlines(this.headlineSwitch);
-    // },
     searchHeadline(e) {
       if (e.target.value.length === 0) {
         this.getLatestHeadlines();
@@ -234,15 +230,19 @@ export default {
       }
     },
     toDetail(headline) {
+      // store selected headline to state to show in details page and go to detail page
       this.setDetailNews(headline);
       this.$router.push('/detail');
     },
   },
   computed: mapGetters(['latestHeadlines', 'headlinesSources', 'isLoading', 'headlineAutocompletes']),
   created() {
+    // check if user is back from details page
     if (this.latestHeadlines === undefined || this.latestHeadlines.length <= 0) {
       this.getLatestHeadlines();
     }
+
+    // check if user is back from details page
     if (this.headlinesSources === undefined || this.headlinesSources.length <= 0) {
       this.getHeadlinesSources();
     }
