@@ -133,6 +133,7 @@ export default {
       this.title = this.objNews.title;
     },
     updateNewsTitle(news) {
+      this.validate();
       this.dialog = false;
       const arrNews = news;
       arrNews.title = this.title;
@@ -141,6 +142,9 @@ export default {
   },
   computed: mapGetters(['objNews', 'objVisitedHeadlines']),
   created() {
+    if (this.objNews === undefined || this.objNews.length <= 0) {
+      this.$router.push('/');
+    }
   },
 };
 </script>
