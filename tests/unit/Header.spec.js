@@ -5,6 +5,6 @@ import Header from '@/components/Header.vue';
 describe('Header.vue', () => {
   it('check componet is runder correctly', () => {
     const wrapper = shallowMount(Header);
-    expect(wrapper.text()).to.contain('News');
+    expect(wrapper.find('h1').text()).equal('News');
   });
 });

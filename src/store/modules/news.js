@@ -11,7 +11,7 @@ const actions = {
   // fetching headline news from backend
   getLatestHeadlines({ commit }) {
     commit('setLoadingStatus', true);
-    fetch('https://newsapi.org/v2/top-headlines?country=us&apiKey=8994ba8af00045af9eacce5ae1fcd5f0')
+    fetch('https://newsapi.org/v2/top-headlines?country=us&apiKey=81864bc8f64745a09e4bb9a97e5e0a28')
       .then((response) => response.json())
       .then((data) => {
         commit('setLoadingStatus', false);
@@ -26,7 +26,7 @@ const actions = {
   // fetching headline source from backend to show in filter menu
   getHeadlinesSources({ commit }) {
     commit('setLoadingStatus', true);
-    fetch('https://newsapi.org/v2/sources?apiKey=8994ba8af00045af9eacce5ae1fcd5f0')
+    fetch('https://newsapi.org/v2/sources?apiKey=81864bc8f64745a09e4bb9a97e5e0a28')
       .then((response) => response.json())
       .then((data) => {
         commit('setLoadingStatus', false);
@@ -43,7 +43,7 @@ const actions = {
     const keywords = e.target.value;
     if (keywords.length > 2) {
       commit('setLoadingStatus', true);
-      fetch(`https://newsapi.org/v2/top-headlines?q=${keywords}&apiKey=8994ba8af00045af9eacce5ae1fcd5f0`)
+      fetch(`https://newsapi.org/v2/top-headlines?q=${keywords}&apiKey=81864bc8f64745a09e4bb9a97e5e0a28`)
         .then((response) => response.json())
         .then((data) => {
           commit('setLoadingStatus', false);

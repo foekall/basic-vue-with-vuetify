@@ -12,6 +12,7 @@
                             v-bind="attrs"
                             v-on="on"
                             class="float-right"
+                            data-cy="open-filter"
                         >
                         <v-icon>mdi-tune</v-icon>
                         </v-btn>
@@ -36,6 +37,7 @@
                                     text
                                     dark
                                     @click="headlineSwitch = []"
+                                    data-cy="clear"
                                 >
                                     Clear
                                 </v-btn>
@@ -43,6 +45,7 @@
                                     dark
                                     text
                                     @click="filterLatestHeadlines(headlineSwitch); dialog = false"
+                                    data-cy="apply"
                                 >
                                     Apply
                                 </v-btn>
@@ -64,6 +67,7 @@
                                         color="primary"
                                         :label="headline.name"
                                         :value="headline.name"
+                                        data-cy="news-switch"
                                     ></v-switch>
                                 </v-col>
                             </v-row>
@@ -86,7 +90,7 @@ export default {
   methods: {
     ...mapActions(['getHeadlinesSources', 'filterLatestHeadlines']),
   },
-  computed: mapGetters(['headlinesSources', 'isLoading']),
+  computed: mapGetters(['headlinesSources']),
   created() {
     // check if user is back from details page
     if (this.headlinesSources === undefined || this.headlinesSources.length <= 0) {

@@ -53,6 +53,7 @@
                         color="white"
                         icon
                         @click="toDetail(headLine)"
+                        data-cy="headline-list"
                     >
                         <v-icon>mdi-arrow-right-thin</v-icon>
                     </v-btn>
@@ -97,6 +98,7 @@
                         color="white"
                         icon
                         @click="toDetail(headLine)"
+                        data-cy="headline-list"
                     >
                         <v-icon>mdi-arrow-right-thin</v-icon>
                     </v-btn>

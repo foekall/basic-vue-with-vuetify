@@ -13,6 +13,7 @@
                 md="8"
             >
                 <v-text-field
+                    data-cy="search"
                     label="Type here to search news"
                     @keyup="searchHeadline($event)"
                     prepend-icon="mdi-text-box-search-outline"
@@ -40,8 +41,9 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['getLoadingStatus', 'getHeadlinesAutocomplete']),
+    ...mapActions(['getLoadingStatus', 'getHeadlinesAutocomplete', 'getLatestHeadlines']),
     searchHeadline(e) {
+      console.log(e.target.value.length);
       if (e.target.value.length === 0) {
         this.getLatestHeadlines();
       } else {
