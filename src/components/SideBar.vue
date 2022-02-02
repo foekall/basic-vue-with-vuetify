@@ -31,7 +31,7 @@ export default {
     toDetail(headline) {
       // update selected headline into state to show in detail page
       this.setDetailNews(headline);
-    }
+    },
   },
   computed: mapGetters(['objVisitedHeadlines']),
   created() {
